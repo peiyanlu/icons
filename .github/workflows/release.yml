@@ -1,0 +1,130 @@
+name: Release Project
+
+on:
+  issue_comment:
+    types: [ created, deleted ]
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      snapshot:
+        description: Snapshot publish tag.
+        type: string
+
+jobs:
+  check:
+    if: inputs.snapshot == ''
+    name: Context check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      continue: ${{ steps.check.outputs.continue }}
+      workflow: ${{ steps.check.outputs.workflow }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      
+      - name: Context check
+        id: check
+        uses: peiyanlu/release@master
+        with:
+          workflow: check
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  
+  pull-request:
+    needs: check
+    if: needs.check.outputs.workflow == 'pull-request'
+    name: Pull request
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      
+      - name: Create or update pull request
+        uses: peiyanlu/release@master
+        with:
+          workflow: pull-request
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  
+  release:
+    needs: check
+    if: needs.check.outputs.workflow == 'release'
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      
+      - name: Release
+        uses: peiyanlu/release@master
+        with:
+          workflow: release
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  
+  snapshot:
+    if: inputs.snapshot != ''
+    name: Snapshot
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      
+      - name: Publish
+        uses: peiyanlu/release@master
+        with:
+          workflow: snapshot
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          bump-snapshot: ${{ inputs.snapshot }}

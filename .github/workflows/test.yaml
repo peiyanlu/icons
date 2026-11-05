@@ -1,0 +1,83 @@
+name: Test Coverage
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 12
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build
+        run: pnpm build
+      
+      - name: Test
+        run: |
+          pnpm test:cov
+          ls coverage
+      
+      - name: Trust taps
+        if: runner.os == 'macOS'
+        run: |
+          brew trust coverallsapp/coveralls
+          brew trust aws/tap
+      
+      - name: Coverage (Report - ${{ matrix.os }})
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: ${{ matrix.os }}
+          parallel: true
+          fail-on-error: false
+  
+  finish:
+    needs: test
+    if: ${{ always() }}
+    name: Finish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      
+      - name: Finish Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+          debug: true

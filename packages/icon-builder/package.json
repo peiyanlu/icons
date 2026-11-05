@@ -1,0 +1,59 @@
+{
+  "name": "@peiyanlu/icon-builder",
+  "version": "0.0.1",
+  "description": "Generate desktop application icons from a single source image.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "exports": "./src/index.ts",
+  "scripts": {
+    "dev": "tsdown -w",
+    "build": "tsdown",
+    "prepublishOnly": "tsdown",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
+  },
+  "author": {
+    "name": "YanluPei",
+    "email": "peiyanlu@vip.qq.com"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "typescript",
+    "lib",
+    "icon",
+    "builder",
+    "desktop",
+    "png",
+    "ico",
+    "icns"
+  ],
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "./package.json": "./package.json"
+    },
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peiyanlu/icons.git",
+    "directory": "packages/icon-builder"
+  },
+  "bugs": {
+    "url": "https://github.com/peiyanlu/icons/issues"
+  },
+  "homepage": "https://github.com/peiyanlu/icons#readme"
+}

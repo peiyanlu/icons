@@ -2,8 +2,10 @@ import type { SharpInput } from 'sharp'
 import { createPng } from './png.ts'
 
 
+export type IcoSize = 16 | 20 | 24 | 32 | 40 | 48 | 64 | 96 | 128 | 256
+
 export interface ICOEntry {
-  size: number
+  size: IcoSize
   data: Buffer
 }
 
@@ -71,7 +73,7 @@ const createICOEntry = (entry: ICOEntry, offset: number): Buffer => {
 }
 
 
-export const createICOEntries = (input: SharpInput, sizes: number[]):Promise<ICOEntry[]> => {
+export const createICOEntries = (input: SharpInput, sizes: IcoSize[]): Promise<ICOEntry[]> => {
   return Promise.all(
     sizes.map(async size => {
       const data = await createPng(input, size)

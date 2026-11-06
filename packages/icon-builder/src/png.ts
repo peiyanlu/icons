@@ -1,8 +1,10 @@
 import sharp, { type SharpInput } from 'sharp'
 
 
+export type PngSize = 16 | 32 | 64 | 128 | 256 | 512 | 1024
+
 export interface PNGEntry {
-  size: number
+  size: PngSize
   data: Buffer
 }
 
@@ -24,7 +26,7 @@ export const createPng = (input: SharpInput, size: number): Promise<Buffer> => {
     .toBuffer()
 }
 
-export const createPNGEntries = (input: SharpInput, sizes: number[]): Promise<PNGEntry[]> => {
+export const createPNGEntries = (input: SharpInput, sizes: PngSize[]): Promise<PNGEntry[]> => {
   return Promise.all(
     sizes.map(async size => {
       const data = await createPng(input, size)

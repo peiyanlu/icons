@@ -1,35 +1,45 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { SharpInput } from 'sharp'
-import { createICNS, createICNSBlocks } from './icns.ts'
-import { createICO, createICOEntries } from './ico.ts'
-import { createPNGEntries } from './png.ts'
+import { createICNS, createICNSBlocks, type IcnsSize } from './icns.ts'
+import { createICO, createICOEntries, type IcoSize } from './ico.ts'
+import { createPNGEntries, type PngSize } from './png.ts'
 
 
-export interface Options {
+export interface GeneratePNGOptions {
   name?: string
-  sizes?: number[]
+  sizes?: PngSize[]
+}
+
+export interface GenerateICOOptions {
+  name?: string
+  sizes?: IcoSize[]
+}
+
+export interface GenerateICNSOptions {
+  name?: string
+  sizes?: IcnsSize[]
 }
 
 export interface GenerateOptions {
   name?: string
   png?: boolean
-  pngSizes?: number[]
+  pngSizes?: PngSize[]
   ico?: boolean
-  icoSizes?: number[]
+  icoSizes?: IcoSize[]
   icns?: boolean
-  icnsSizes?: number[]
+  icnsSizes?: IcnsSize[]
 }
 
 
-export const PNG_SIZES: number[] = [ 16, 32, 64, 128, 256, 512, 1024 ]
+export const PNG_SIZES: PngSize[] = [ 16, 32, 64, 128, 256, 512, 1024 ]
 
-export const ICO_SIZES: number[] = [ 16, 20, 24, 32, 40, 48, 64, 96, 128, 256 ].reverse()
+export const ICO_SIZES: IcoSize[] = [ 256, 128, 96, 64, 48, 40, 32, 24, 20, 16 ]
 
-export const ICNS_SIZES: number[] = [ 16, 32, 64, 128, 256, 512, 1024 ].reverse()
+export const ICNS_SIZES: IcnsSize[] = [ 1024, 512, 256, 128, 64, 32, 16 ]
 
 
-export const generatePNG = async (input: SharpInput, outDir: string, options?: Options): Promise<void> => {
+export const generatePNG = async (input: SharpInput, outDir: string, options?: GeneratePNGOptions): Promise<void> => {
   const { name = 'icon', sizes = PNG_SIZES } = options ?? {}
   const entries = await createPNGEntries(input, sizes)
   
@@ -46,7 +56,7 @@ export const generatePNG = async (input: SharpInput, outDir: string, options?: O
   }
 }
 
-export const generateICO = async (input: SharpInput, outDir: string, options?: Options): Promise<void> => {
+export const generateICO = async (input: SharpInput, outDir: string, options?: GenerateICOOptions): Promise<void> => {
   const { name = 'icon', sizes = ICO_SIZES } = options ?? {}
   const entries = await createICOEntries(input, sizes)
   const buffer = createICO(entries)
@@ -57,7 +67,7 @@ export const generateICO = async (input: SharpInput, outDir: string, options?: O
   await writeFile(file, buffer)
 }
 
-export const generateICNS = async (input: SharpInput, outDir: string, options?: Options): Promise<void> => {
+export const generateICNS = async (input: SharpInput, outDir: string, options?: GenerateICNSOptions): Promise<void> => {
   const { name = 'icon', sizes = ICNS_SIZES } = options ?? {}
   const entries = await createICNSBlocks(input, sizes)
   const buffer = createICNS(entries)
@@ -70,7 +80,7 @@ export const generateICNS = async (input: SharpInput, outDir: string, options?: 
 
 export const generate = async (input: SharpInput, outDir: string, options?: GenerateOptions): Promise<void> => {
   const { name = 'icon', png = true, ico = true, icns = true } = options ?? {}
-  const { pngSizes = PNG_SIZES, icoSizes = ICNS_SIZES, icnsSizes = ICNS_SIZES } = options ?? {}
+  const { pngSizes = PNG_SIZES, icoSizes = ICO_SIZES, icnsSizes = ICNS_SIZES } = options ?? {}
   
   if (png) {
     await generatePNG(input, outDir, { name, sizes: pngSizes })

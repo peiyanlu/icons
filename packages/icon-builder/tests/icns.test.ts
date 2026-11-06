@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
-import { createICNS, createICNSBlocks, type ICNSBlock, parseICNS } from '../src/icns.ts'
+import { createICNS, createICNSBlocks, type ICNSBlock, type IcnsSize, type IcnsType, parseICNS } from '../src/icns.ts'
 import { createPng } from '../src/png.ts'
 
 
@@ -224,8 +224,8 @@ describe('ICNS', () => {
   it('should ignore unknown block type', () => {
     const buffer = createICNS([
       {
-        type: 'test',
-        size: 100,
+        type: 'test' as IcnsType,
+        size: 100 as IcnsSize,
         data: Buffer.from([ 1 ]),
       },
     ])

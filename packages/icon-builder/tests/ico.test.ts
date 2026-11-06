@@ -71,7 +71,7 @@ describe('ICO', () => {
   })
   
   it('should parse 256 icon size', async () => {
-    const entries =
+    const entries: ICOEntry[] =
       [
         {
           size: 256,

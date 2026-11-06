@@ -2,21 +2,25 @@ import type { SharpInput } from 'sharp'
 import { createPng } from './png.ts'
 
 
+export type IcnsType = 'icp4' | 'icp5' | 'icp6' | 'ic07' | 'ic08' | 'ic09' | 'ic10'
+
+export type IcnsSize = 16 | 32 | 64 | 128 | 256 | 512 | 1024
+
 export interface ICNSBlock {
-  type: string
-  size: number
+  type: IcnsType
+  size: IcnsSize
   data: Buffer
 }
 
 export interface ICNSImage {
-  type: string
+  type: IcnsType
   width: number
   height: number
   data: Buffer
 }
 
 
-const ICNS_TYPES: Record<number, string> = {
+const ICNS_TYPES: Record<number, IcnsType> = {
   16: 'icp4',
   32: 'icp5',
   64: 'icp6',
@@ -25,7 +29,15 @@ const ICNS_TYPES: Record<number, string> = {
   512: 'ic09',
   1024: 'ic10',
 }
-const ICNS_SIZES = Object.fromEntries(Object.entries(ICNS_TYPES).map(([ size, type ]) => [ type, Number(size) ]))
+const ICNS_SIZES: Record<IcnsType, number> = {
+  icp4: 16,
+  icp5: 32,
+  icp6: 64,
+  ic07: 128,
+  ic08: 256,
+  ic09: 512,
+  ic10: 1024,
+}
 
 // ICNS file header
 const ICNS_HEADER_SIZE = 8
@@ -69,7 +81,7 @@ const createICNSBlock = (block: ICNSBlock): Buffer => {
 }
 
 
-export const createICNSBlocks = (input: SharpInput, sizes: number[]): Promise<ICNSBlock[]> => {
+export const createICNSBlocks = (input: SharpInput, sizes: IcnsSize[]): Promise<ICNSBlock[]> => {
   return Promise.all(
     sizes.map(async size => {
       const data = await createPng(input, size)
@@ -123,7 +135,7 @@ export const parseICNS = (buffer: Buffer): ICNSImage[] => {
       'ascii',
       offset + ICNS_BLOCK_TYPE_OFFSET,
       offset + ICNS_BLOCK_TYPE_OFFSET + ICNS_BLOCK_TYPE_SIZE,
-    )
+    ) as IcnsType
     
     const blockSize = buffer.readUInt32BE(offset + ICNS_BLOCK_SIZE_OFFSET)
     if (blockSize < ICNS_BLOCK_HEADER_SIZE) {

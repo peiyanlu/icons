@@ -1,5 +1,5 @@
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import type { SharpInput } from 'sharp'
 import { createICNS, createICNSBlocks } from './icns.ts'
 import { createICO, createICOEntries } from './ico.ts'
@@ -33,12 +33,15 @@ export const generatePNG = async (input: SharpInput, outDir: string, options?: O
   const { name = 'icon', sizes = PNG_SIZES } = options ?? {}
   const entries = await createPNGEntries(input, sizes)
   
+  await mkdir(outDir, { recursive: true })
+  
   for (const { size, data } of entries) {
     const file = join(outDir, `${ name }-${ size }x${ size }.png`)
     await writeFile(file, data)
     
     if (size === 1024) {
-      await writeFile(join(outDir, `${ name }.png`), data)
+      const file = join(outDir, `${ name }.png`)
+      await writeFile(file, data)
     }
   }
 }
@@ -48,6 +51,8 @@ export const generateICO = async (input: SharpInput, outDir: string, options?: O
   const entries = await createICOEntries(input, sizes)
   const buffer = createICO(entries)
   
+  await mkdir(outDir, { recursive: true })
+  
   const file = join(outDir, `${ name }.ico`)
   await writeFile(file, buffer)
 }
@@ -56,6 +61,8 @@ export const generateICNS = async (input: SharpInput, outDir: string, options?: 
   const { name = 'icon', sizes = ICNS_SIZES } = options ?? {}
   const entries = await createICNSBlocks(input, sizes)
   const buffer = createICNS(entries)
+  
+  await mkdir(outDir, { recursive: true })
   
   const file = join(outDir, `${ name }.icns`)
   await writeFile(file, buffer)

@@ -11,6 +11,9 @@ importers:
       '@peiyanlu/release':
         specifier: ^2.1.2
         version: 2.1.2
+      '@peiyanlu/test-tools':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@types/node':
         specifier: ^24.13.3
         version: 24.19.2
@@ -377,6 +380,10 @@ packages:
     resolution: {integrity: sha512-oIK3YtU9aIC3Sq6HyNB5P3H5vaZDDdz6xZ+apmzHqON8Nfz/eWpQslFfp1pFgBfR9RZW45icfBDn/Ikn8VdO8A==}
     engines: {node: '>=22.18'}
     hasBin: true
+
+  '@peiyanlu/test-tools@1.0.0':
+    resolution: {integrity: sha512-VfUuBxyu7C+SYNlWeWSGwOnxiwHIgPfO8JKrUJC02WgHlAJfGDCv2CPvbStOaWzNapZpsB8RjRSBwovDtf21cw==}
+    engines: {node: '>=22'}
 
   '@peiyanlu/ts-utils@0.0.12':
     resolution: {integrity: sha512-4J6KdTOcozak1q158GAQiV9FwtUdMPFmcGJfAkx+hS1oRl3k2hQDY4p0seLVhXWfJtPhcXbWvS7VE9uBIfWiTw==}
@@ -1839,6 +1846,10 @@ snapshots:
       semver: 7.8.6
       tinyglobby: 0.2.17
       yaml: 2.9.1
+
+  '@peiyanlu/test-tools@1.0.0':
+    dependencies:
+      '@peiyanlu/ts-utils': 1.0.0
 
   '@peiyanlu/ts-utils@0.0.12': {}
 

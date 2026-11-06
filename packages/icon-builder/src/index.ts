@@ -1,7 +1,7 @@
-export * from './png.js'
+export * from './png.ts'
 
-export * from './icns.js'
+export * from './icns.ts'
 
-export * from './ico.js'
+export * from './ico.ts'
 
-export * from './generate.js'
+export * from './generate.ts'

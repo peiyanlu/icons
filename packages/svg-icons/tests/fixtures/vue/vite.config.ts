@@ -1,7 +1,7 @@
 import vue from '@vitejs/plugin-vue'
 import { join } from 'node:path'
 import { defineConfig } from 'vite'
-import { vitePlugin } from '../../../src/vite.js'
+import { vitePlugin } from '../../../src/vite.ts'
 
 
 // https://vitejs.dev/config

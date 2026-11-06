@@ -1,9 +1,9 @@
 import { writeFile } from 'fs/promises'
 import { mkdirSync, mkdtempSync, readFileSync } from 'node:fs'
 import { join } from 'path'
-import { parseICNS } from '../src/icns.js'
-import { parseICO } from '../src/ico.js'
-import { generate } from '../src/index.js'
+import { parseICNS } from '../src/icns.ts'
+import { parseICO } from '../src/ico.ts'
+import { generate } from '../src/index.ts'
 
 
 const createTempDir = (parent: string, key: string) => {

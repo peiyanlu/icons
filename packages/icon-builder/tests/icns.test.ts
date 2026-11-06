@@ -1,7 +1,7 @@
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
-import { createICNS, createICNSBlocks, type ICNSBlock, parseICNS } from '../src/icns.js'
-import { createPng } from '../src/png.js'
+import { createICNS, createICNSBlocks, type ICNSBlock, parseICNS } from '../src/icns.ts'
+import { createPng } from '../src/png.ts'
 
 
 const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {

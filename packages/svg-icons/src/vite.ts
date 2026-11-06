@@ -10,10 +10,10 @@ import {
   createReactComponentType,
   createVueComponent,
   createVueComponentType,
-} from './components.js'
-import { createNamesCode, createNamesType } from './names.js'
-import { createRegisterCode, createRegisterType } from './register.js'
-import { createSpriteCode, createSpriteType } from './sprite.js'
+} from './components.ts'
+import { createNamesCode, createNamesType } from './names.ts'
+import { createRegisterCode, createRegisterType } from './register.ts'
+import { createSpriteCode, createSpriteType } from './sprite.ts'
 
 
 export interface SvgIconsOptions {

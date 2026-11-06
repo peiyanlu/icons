@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
-import { createPng, createPNGEntries } from '../src/png.js'
+import { createPng, createPNGEntries } from '../src/png.ts'
 
 
 const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {

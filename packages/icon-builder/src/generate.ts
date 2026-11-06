@@ -1,9 +1,9 @@
 import { writeFile } from 'fs/promises'
 import { join } from 'path'
 import type { SharpInput } from 'sharp'
-import { createICNS, createICNSBlocks } from './icns.js'
-import { createICO, createICOEntries } from './ico.js'
-import { createPNGEntries } from './png.js'
+import { createICNS, createICNSBlocks } from './icns.ts'
+import { createICO, createICOEntries } from './ico.ts'
+import { createPNGEntries } from './png.ts'
 
 
 export interface Options {

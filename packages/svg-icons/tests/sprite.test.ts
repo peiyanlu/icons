@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { createSpriteCode } from '../src/sprite.js'
+import { createSpriteCode } from '../src/sprite.ts'
 
 
 it('createSpriteCode', () => {

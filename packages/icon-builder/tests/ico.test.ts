@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
-import { createICO, createICOEntries, type ICOEntry, parseICO } from '../src/ico.js'
+import { createICO, createICOEntries, type ICOEntry, parseICO } from '../src/ico.ts'
 
 
 const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {

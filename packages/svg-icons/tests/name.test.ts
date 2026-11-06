@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { createNamesCode, createNamesType } from '../src/names.js'
+import { createNamesCode, createNamesType } from '../src/names.ts'
 
 
 const names = [ 'FitView', 'ZoomIn' ]

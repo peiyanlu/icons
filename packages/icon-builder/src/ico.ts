@@ -1,5 +1,5 @@
 import type { SharpInput } from 'sharp'
-import { createPng } from './png.js'
+import { createPng } from './png.ts'
 
 
 export interface ICOEntry {

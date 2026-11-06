@@ -1,7 +1,7 @@
 import { join, resolve } from 'node:path'
 import { build } from 'vite'
 import { expect, it, vi } from 'vitest'
-import { vitePlugin } from '../src/vite.js'
+import { vitePlugin } from '../src/vite.ts'
 
 
 const mocks = vi.hoisted(() => ({
@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
   createReactComponentType: vi.fn(),
 }))
 
-vi.mock('../src/components.js', () => mocks)
+vi.mock('../src/components.ts', () => mocks)
 
 
 it('should resolve virtual modules', () => {

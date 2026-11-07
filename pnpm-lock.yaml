@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@peiyanlu/release':
-        specifier: ^2.1.2
-        version: 2.1.2
+        specifier: ^2.1.3
+        version: 2.1.3
       '@peiyanlu/test-tools':
         specifier: ^1.0.0
         version: 1.0.0
@@ -376,8 +376,8 @@ packages:
     resolution: {integrity: sha512-0Qw60jl1HPbHaqiiIKIMVBufCzeRviMGyrI1pJ7u1kfWrvHcP+2PH1pQ9SSXNIie5/2dTwsyp0cQbwDEyZGjPA==}
     engines: {node: '>=22'}
 
-  '@peiyanlu/release@2.1.2':
-    resolution: {integrity: sha512-oIK3YtU9aIC3Sq6HyNB5P3H5vaZDDdz6xZ+apmzHqON8Nfz/eWpQslFfp1pFgBfR9RZW45icfBDn/Ikn8VdO8A==}
+  '@peiyanlu/release@2.1.3':
+    resolution: {integrity: sha512-j0TDMcvDBfPglQYHVwsK1jT1xyVbTKPddTRA6CSzceEQh+g11juER5GRif7DNdKHMdaI1vFFoe/dSWAboetvvg==}
     engines: {node: '>=22.18'}
     hasBin: true
 
@@ -1825,7 +1825,7 @@ snapshots:
       minimatch: 10.2.6
       tinyglobby: 0.2.17
 
-  '@peiyanlu/release@2.1.2':
+  '@peiyanlu/release@2.1.3':
     dependencies:
       '@actions/core': 3.0.1
       '@actions/github': 9.1.1

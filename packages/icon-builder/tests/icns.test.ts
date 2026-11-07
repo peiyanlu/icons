@@ -1,26 +1,25 @@
-import sharp from 'sharp'
-import { describe, expect, it } from 'vitest'
-import { createICNS, createICNSBlocks, type ICNSBlock, type IcnsSize, type IcnsType, parseICNS } from '../src/icns.ts'
+import { createTempWorkspace } from '@peiyanlu/test-tools'
+import { readdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { afterEach, describe, expect, it } from 'vitest'
+import {
+  createICNS,
+  createICNSBlocks,
+  type ICNSBlock,
+  type IcnsSize,
+  type IcnsType,
+  parseICNS,
+  writeICNSImagesAsPNGs,
+} from '../src/icns.ts'
 import { createPng } from '../src/png.ts'
+import { createTestPNG } from './icons/png-file.ts'
 
 
-const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {
-  return sharp({
-    create: {
-      width: 512,
-      height: 512,
-      channels: 4,
-      background: {
-        r: 255,
-        g: 0,
-        b: 0,
-        alpha,
-      },
-    },
-  })
-    .png()
-    .toBuffer()
-}
+const { path, remove } = createTempWorkspace()
+
+afterEach(() => {
+  remove()
+})
 
 
 // ICNS file header
@@ -251,5 +250,23 @@ describe('ICNS', () => {
     
     expect(blocks[0].type).toBe('ic07')
     expect(blocks[1].type).toBe('ic08')
+  })
+  
+  it('should parse and write icns to png', async () => {
+    const input = await createTestPNG()
+    
+    const sizes: IcnsSize[] = [ 1024, 512, 256, 128, 64, 32, 16 ]
+    const entries = await createICNSBlocks(input, sizes)
+    const buffer = createICNS(entries)
+    
+    const outDir = join(path, 'output')
+    await writeICNSImagesAsPNGs(buffer, outDir)
+    
+    expect(readdirSync(outDir)).toEqual(
+      expect.arrayContaining([
+        ...sizes.map(size => `icon-${ size }x${ size }.png`),
+      ]),
+    )
+    expect(readdirSync(outDir).length).toBe(sizes.length)
   })
 })

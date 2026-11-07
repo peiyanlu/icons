@@ -1,25 +1,7 @@
 import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
 import { createPng, createPNGEntries } from '../src/png.ts'
-
-
-const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {
-  return sharp({
-    create: {
-      width: 512,
-      height: 512,
-      channels: 4,
-      background: {
-        r: 255,
-        g: 0,
-        b: 0,
-        alpha,
-      },
-    },
-  })
-    .png()
-    .toBuffer()
-}
+import { createTestPNG } from './icons/png-file.ts'
 
 
 describe('createPng', () => {

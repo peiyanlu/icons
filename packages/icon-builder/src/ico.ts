@@ -1,3 +1,5 @@
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import type { SharpInput } from 'sharp'
 import { createPng } from './png.ts'
 
@@ -145,4 +147,13 @@ export const parseICO = (buffer: Buffer): ICOImage[] => {
   }
   
   return images
+}
+
+export const writeICOImagesAsPNGs = async (buffer: Buffer, outDir: string): Promise<void> => {
+  await mkdir(outDir, { recursive: true })
+  
+  for (const { width, height, data } of parseICO(buffer)) {
+    const file = join(outDir, `icon-${ width }x${ height }.png`)
+    await writeFile(file, data)
+  }
 }

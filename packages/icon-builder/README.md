@@ -45,6 +45,31 @@ await generateICO('./icon.svg', './build-icons')
 await generateICNS('./icon.svg', './build-icons')
 ```
 
+Parse ICO and ICNS files:
+
+```ts
+import { parseICNS, parseICO } from '@peiyanlu/icon-builder'
+import { readFile } from 'node:fs/promises'
+
+
+const icoImages = parseICO(await readFile('./icon.ico'))
+const icnsImages = parseICNS(await readFile('./icon.icns'))
+
+console.log(icoImages.map(({ width, height }) => `${ width }x${ height }`))
+console.log(icnsImages.map(({ width, height }) => `${ width }x${ height }`))
+```
+
+Each parsed image includes its `width`, `height`, and PNG `data` buffer. Write all images from an icon file as PNGs:
+
+```ts
+import { writeICNSImagesAsPNGs, writeICOImagesAsPNGs } from '@peiyanlu/icon-builder'
+import { readFile } from 'node:fs/promises'
+
+
+await writeICOImagesAsPNGs(await readFile('./icon.ico'), './build-icons/ico')
+await writeICNSImagesAsPNGs(await readFile('./icon.icns'), './build-icons/icns')
+```
+
 ## License
 
 [MIT](./LICENSE)

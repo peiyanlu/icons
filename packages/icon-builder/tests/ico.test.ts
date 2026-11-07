@@ -1,25 +1,17 @@
+import { createTempWorkspace } from '@peiyanlu/test-tools'
+import { readdirSync } from 'node:fs'
+import { join } from 'node:path'
 import sharp from 'sharp'
-import { describe, expect, it } from 'vitest'
-import { createICO, createICOEntries, type ICOEntry, parseICO } from '../src/ico.ts'
+import { afterEach, describe, expect, it } from 'vitest'
+import { createICO, createICOEntries, type ICOEntry, type IcoSize, parseICO, writeICOImagesAsPNGs } from '../src/ico.ts'
+import { createTestPNG } from './icons/png-file.ts'
 
 
-const createTestPNG = async (alpha = 1): Promise<Buffer<ArrayBuffer>> => {
-  return sharp({
-    create: {
-      width: 512,
-      height: 512,
-      channels: 4,
-      background: {
-        r: 255,
-        g: 0,
-        b: 0,
-        alpha,
-      },
-    },
-  })
-    .png()
-    .toBuffer()
-}
+const { path, remove } = createTempWorkspace()
+
+afterEach(() => {
+  remove()
+})
 
 
 const ICO_ICON_MAX_SIZE = 256
@@ -167,5 +159,23 @@ describe('ICO', () => {
       expect(meta.width).toBe(entry.size)
       expect(meta.height).toBe(entry.size)
     }
+  })
+  
+  it('should parse and write ico to png', async () => {
+    const input = await createTestPNG()
+    
+    const sizes: IcoSize[] = [ 256, 128, 96, 64, 48, 40, 32, 24, 20, 16 ]
+    const entries = await createICOEntries(input, sizes)
+    const buffer = createICO(entries)
+    
+    const outDir = join(path, 'output')
+    await writeICOImagesAsPNGs(buffer, outDir)
+    
+    expect(readdirSync(outDir)).toEqual(
+      expect.arrayContaining([
+        ...sizes.map(size => `icon-${ size }x${ size }.png`),
+      ]),
+    )
+    expect(readdirSync(outDir).length).toBe(sizes.length)
   })
 })
